@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.oa.dao.TestAdDao">
+    
+    <sql id="testAdColumns">
+		a.id, 
+		a.customer AS "customer",
+		a.contract_no AS "contractNo",
+		a.linkman AS "linkman",
+		a.linkman_phone AS "linkmanPhone",
+		a.industry_typ AS "industryTyp",
+		a.typ AS "typ",
+		a.play_content AS "playContent",
+		a.play_require AS "playRequire",
+		a.play_time AS "playTime",
+		a.play_between AS "playBetween",
+		a.play_day AS "playDay",
+		a.memo,
+		a.approve_leader AS "approveLeader",
+		a.approve_responser AS "approveResponser",
+		a.approve_operator AS "approveOperator",
+		a.proc_ins_id,
+		a.create_by AS "createBy.id",
+		a.create_date, 
+		a.update_by AS "updateBy.id", 
+		a.update_date, 
+		a.remarks, 
+		a.del_flag
+	</sql>
+
+	<sql id="testAdJoins">
+	</sql>
+
+    <select id="get" resultType="TestAd">
+		SELECT 
+			<include refid="testAdColumns"/>
+		FROM oa_test_ad a
+		<include refid="testAdJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+    <select id="getByProcInsId" resultType="TestAd">
+		SELECT 
+			<include refid="testAdColumns"/>
+		FROM oa_test_ad a
+		<include refid="testAdJoins"/>
+		WHERE a.proc_ins_id = #{procInsId}
+	</select>
+	
+	<select id="findList" resultType="TestAd">
+		SELECT 
+			<include refid="testAdColumns"/>
+		FROM oa_test_ad a
+		<include refid="testAdJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="customer != null and customer != ''">
+			AND customer LIKE CONCAT('%', #{customer}, '%')
+		</if>
+		<if test="contractNo != null and contractNo != ''">
+			AND contract_no LIKE CONCAT('%', #{contractNo}, '%')
+		</if>
+		<if test="playDay != null and playDay != ''">
+			AND play_day LIKE CONCAT('%', #{playDay}, '%')
+		</if>
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="TestAd">
+		SELECT 
+			<include refid="testAdColumns"/>
+		FROM oa_test_ad a
+		<include refid="testAdJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_test_ad(
+			id,
+			customer,
+			contract_no,
+			linkman,
+			linkman_phone,
+			industry_typ,
+			typ,
+			play_content,
+			play_require,
+			play_time,
+			play_between,
+			play_day,
+			memo,
+			create_by,
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+		) VALUES (
+			#{id}, 
+			#{customer},
+			#{contractNo},
+			#{linkman},
+			#{linkmanPhone},
+			#{industryTyp},
+			#{typ},
+			#{playContent},
+			#{playRequire},
+			#{playTime},
+			#{playBetween},
+			#{playDay},
+			#{memo},
+			#{createBy.id},
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_test_ad SET 
+			customer = #{customer},
+			contract_no = #{contractNo},
+			linkman = #{linkman},
+			linkman_phone = #{linkmanPhone},
+			industry_typ = #{industryTyp},
+			typ = #{typ},
+			play_content = #{playContent},
+			play_require = #{playRequire},
+			play_time = #{playTime},
+			play_between = #{playBetween},
+			play_day = #{playDay},
+			memo = #{memo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateInsId">
+		UPDATE oa_test_ad SET 
+			proc_ins_id = #{procInsId},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateLeaderText">
+		UPDATE oa_test_ad SET 
+			approve_leader = #{approveLeader},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateResponserText">
+		UPDATE oa_test_ad SET
+			approve_responser = #{approveResponser},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateOperatorText">
+		UPDATE oa_test_ad SET 
+			approve_operator = #{approveOperator},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE oa_test_ad SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

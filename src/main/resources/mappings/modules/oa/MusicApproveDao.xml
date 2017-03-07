@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.oa.dao.MusicApproveDao">
+    
+    <sql id="musicApproveColumns">
+		a.id, 
+		a.customer AS "customer",
+		a.contract_no AS "contractNo",
+		a.linkman AS "linkman",
+		a.linkman_phone AS "linkmanPhone",
+		a.upload_file AS "uploadFile",
+		a.memo,
+		a.approve_leader AS "approveLeader",
+		a.approve_responser AS "approveResponser",
+		a.approve_operator AS "approveOperator",
+		a.proc_ins_id,
+		a.create_by AS "createBy.id",
+		a.create_date, 
+		a.update_by AS "updateBy.id", 
+		a.update_date, 
+		a.remarks, 
+		a.del_flag
+	</sql>
+
+	<sql id="musicApproveJoins">
+	</sql>
+
+    <select id="get" resultType="MusicApprove">
+		SELECT 
+			<include refid="musicApproveColumns"/>
+		FROM oa_music_approve a
+		<include refid="musicApproveJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+    <select id="getByProcInsId" resultType="MusicApprove">
+		SELECT 
+			<include refid="musicApproveColumns"/>
+		FROM oa_music_approve a
+		<include refid="musicApproveJoins"/>
+		WHERE a.proc_ins_id = #{procInsId}
+	</select>
+	
+	<select id="findList" resultType="MusicApprove">
+		SELECT 
+			<include refid="musicApproveColumns"/>
+		FROM oa_music_approve a
+		<include refid="musicApproveJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="customer != null and customer != ''">
+			AND customer LIKE CONCAT('%', #{customer}, '%')
+		</if>
+		<if test="contractNo != null and contractNo != ''">
+			AND contract_no LIKE CONCAT('%', #{contractNo}, '%')
+		</if>
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="MusicApprove">
+		SELECT 
+			<include refid="musicApproveColumns"/>
+		FROM oa_music_approve a
+		<include refid="musicApproveJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_music_approve(
+			id,
+			customer,
+			contract_no,
+			linkman,
+			linkman_phone,
+			upload_file,
+			memo,
+			create_by,
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+		) VALUES (
+			#{id}, 
+			#{customer},
+			#{contractNo},
+			#{linkman},
+			#{linkmanPhone},
+			#{uploadFile},
+			#{memo},
+			#{createBy.id},
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_music_approve SET 
+			customer = #{customer},
+			contract_no = #{contractNo},
+			linkman = #{linkman},
+			linkman_phone = #{linkmanPhone},
+			upload_file = #{uploadFile},
+			memo = #{memo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateInsId">
+		UPDATE oa_music_approve SET 
+			proc_ins_id = #{procInsId},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateLeaderText">
+		UPDATE oa_music_approve SET 
+			approve_leader = #{approveLeader},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateResponserText">
+		UPDATE oa_music_approve SET
+			approve_responser = #{approveResponser},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateOperatorText">
+		UPDATE oa_music_approve SET 
+			approve_operator = #{approveOperator},
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE oa_music_approve SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

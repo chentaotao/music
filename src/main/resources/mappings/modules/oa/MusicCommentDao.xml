@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.oa.dao.MusicCommentDao">
+    
+    <sql id="musicCommentColumns">
+		a.id, 
+		a.industry_typ AS "industryTyp",
+		a.typ AS "typ",
+		a.play_content AS "playContent",
+		a.play_require AS "playRequire",
+		a.play_time AS "playTime",
+		a.play_between AS "playBetween",
+		a.play_day AS "playDay",
+		a.music_approve_id AS "musicApproveId",
+		a.create_by AS "createBy.id",
+		a.create_date, 
+		a.update_by AS "updateBy.id", 
+		a.update_date, 
+		a.remarks, 
+		a.del_flag
+	</sql>
+	<sql id="musicCommentJoins">
+	</sql>
+    <select id="get" resultType="MusicComment">
+		SELECT 
+			<include refid="musicCommentColumns"/>
+		FROM oa_music_comment a
+		<include refid="musicCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+    <select id="findListByMusicApproveId" resultType="MusicComment">
+		SELECT 
+			<include refid="musicCommentColumns"/>
+		FROM oa_music_comment a
+		<include refid="musicCommentJoins"/>
+		WHERE a.music_approve_id = #{musicApproveId}
+	</select>
+	
+	<select id="findList" resultType="MusicComment">
+		SELECT 
+			<include refid="musicCommentColumns"/>
+		FROM oa_music_comment a
+		<include refid="musicCommentJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="MusicComment">
+		SELECT 
+			<include refid="musicCommentColumns"/>
+		FROM oa_music_comment a
+		<include refid="musicCommentJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY a.update_date DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_music_comment(
+			id,
+			industry_typ,
+			typ,
+			play_content,
+			play_require,
+			play_time,
+			play_between,
+			play_day,
+			music_approve_id,
+			create_by,
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+		) VALUES (
+			#{id}, 
+			#{industryTyp},
+			#{typ},
+			#{playContent},
+			#{playRequire},
+			#{playTime},
+			#{playBetween},
+			#{playDay},
+			#{musicApproveId},
+			#{createBy.id},
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_music_comment SET
+			industry_typ = #{industryTyp},
+			typ = #{typ},
+			play_content = #{playContent},
+			play_require = #{playRequire},
+			play_time = #{playTime},
+			play_between = #{playBetween},
+			play_day = #{playDay},
+			music_approve_id = #{musicApproveId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE oa_music_comment SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
