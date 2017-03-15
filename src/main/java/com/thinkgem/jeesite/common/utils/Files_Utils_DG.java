@@ -35,24 +35,24 @@ public final class Files_Utils_DG {
 	 */
 	public static String FilesUpload_transferTo_spring(HttpServletRequest request, MultipartFile multipartFile, String filePath) {
 		if (multipartFile != null) {
-			//get files suffix
-			String suffix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
-			//filePath+fileName the complex file Name
-			String absolutePath = getAndSetAbsolutePath(request, filePath, suffix);
-			//return relative Path
-			String relativePath = getRelativePath(filePath, suffix);
 			try {
+				//get files suffix
+				String suffix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
+				//filePath+fileName the complex file Name
+				String absolutePath = getAndSetAbsolutePath(request, filePath, suffix);
+				//return relative Path
+				String relativePath = getRelativePath(filePath, suffix);
 				//save file
 				multipartFile.transferTo(new File(absolutePath));
 				//return relative Path
 				String path = absolutePath.substring(absolutePath.indexOf("filesOut")-1);
 				return path;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				return null;
+				return "";
 			}
 		} else
-			return null;
+			return "";
 	}
 
 	/**

@@ -4,41 +4,89 @@
 <head>
 	<title>审批管理</title>
 	<meta name="decorator" content="default"/>
+	<style type="text/css">
+		.blur {
+			border: 1px solid red;
+		}
+	</style>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("#name").focus();
 			$("#btnSubmit").click(function(){
+			    var flag = true;
 				var customer = $("[name='customer']").val();
+				if(customer==""){
+                    $("[name='customer']").addClass("blur");
+                    $("[name='customer']").parent().parent().find(".help-block").css("display","block");
+					flag = false;
+				}
                 var contractNo = $("[name='contractNo']").val();
+                if(customer==""){
+                    $("[name='contractNo']").parent().parent().find(".help-block").css("display","block");
+                    flag = false;
+                }
                 var linkman = $("[name='linkman']").val();
+                if(customer==""){
+                    $("[name='linkman']").parent().parent().find(".help-block").css("display","block");
+                    flag = false;
+                }
                 var linkmanPhone = $("[name='linkmanPhone']").val();
                 var memo = $("[name='memo']").val();
                 var industryTyp = "";
 				$("[name='industryTyp']").each(function(){
+					if($(this).val()==""){
+                        $(this).addClass("blur");
+                        flag = false;
+					}
 					industryTyp = industryTyp+$(this).val()+";";
 				})
                 var typ = "";
                 $("[name='typ']").each(function(){
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     typ = typ+$(this).val()+";";
                 })
                 var playContent = "";
                 $("[name='playContent']").each(function(){
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     playContent = playContent+$(this).val()+";";
                 })
                 var playRequire = "";
                 $("[name='playRequire']").each(function(){
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     playRequire = playRequire+$(this).val()+";";
                 })
                 var playDay = "";
                 $("[name='playDay']").each(function(){
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     playDay = playDay+$(this).val()+";";
                 })
                 var playTime = "";
                 $("[name='playTime']").each(function(){
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     playTime = playTime+$(this).val()+";";
                 })
                 var playBetween = "";
                 $("[name='playBetween']").each(function(){
+                    console.log($(this).html());
+                    if($(this).val()==""){
+                        $(this).parent().parent().find(".help-block").css("display","block");
+                        flag = false;
+                    }
                     playBetween = playBetween+$(this).val()+";";
                 })
 				console.log("customer :"+customer);
@@ -53,7 +101,14 @@
                 console.log("playDay :"+playDay);
                 console.log("playTime :"+playTime);
                 console.log("playBetween :"+playBetween);
-				$("#inputForm").submit();
+				if(flag){
+				    console.log("提交申请");
+                    $("#inputForm").submit();
+				}else{
+				    console.log("请填写相应内容");
+				    return false;
+				}
+
 			});
 			$("[name='addDivWithMusicComment']").click(function () {
 				console.log("ctt");
@@ -66,11 +121,18 @@
                 newDiv.find("[name='playRequire']").val("");
                 newDiv.find("[name='playDay']").val("");
                 newDiv.find("[name='playTime']").val("");
-                newDiv.find("[name='playBetween']").html("");
+                newDiv.find("[name='playBetween']").val("");
             })
             $("[name='delDivWithMusicComment']").click(function () {
                 console.log("ctt del");
-                $(this).parent().remove();
+                var length = $(".mcCss").length;
+                if(length<=1){
+                    alert("播出内容至少有一个");
+                    return false;
+				}else{
+                    $(this).parent().remove();
+				}
+
             })
 		});
 
@@ -102,29 +164,29 @@
 								<label class="control-label" >客户名称</label>
 								<div class="controls">
 									<input type="text" placeholder="请填写客户名称" name="customer" id="customer" class="input-xlarge" value="${musicApprove.customer}">
-									<p class="help-block" style="display: none;">请填写客户名称</p>
+									<p class="help-block" style="display: none;color:red;">请填写客户名称</p>
 								</div>
 							</div>
 							<div class="control-group">
 								<label class="control-label" >合同号</label>
 								<div class="controls">
 									<input type="text" placeholder="请填写合同号" name="contractNo" id="contractNo" class="input-xlarge"  value="${musicApprove.contractNo}">
-									<p class="help-block" style="display: none;">请填写合同号</p>
+									<p class="help-block" style="display: none;color:red;">请填写合同号</p>
 								</div>
 							</div>
 							<div class="control-group">
 								<label class="control-label" >业务联系人</label>
 								<div class="controls">
 									<input type="text" placeholder="请填写业务联系人"  name="linkman" id="linkman" class="input-xlarge" value="${musicApprove.linkman}">
-									<p class="help-block" style="display: none;">请填写业务联系人</p>
+									<p class="help-block" style="display: none;color:red;">请填写业务联系人</p>
 								</div>
 							</div>
 
 							<div class="control-group">
 								<label class="control-label" >业务联系人电话</label>
 								<div class="controls">
-									<input type="text" placeholder="请填写业务联系人电话"  name="linkmanPhone" id="linkmanPhone" class="input-xlarge" value="${musicApprove.linkmanPhone}">
-									<p class="help-block" style="display: none;">请填写业务联系人电话</p>
+									<input type="text" placeholder="请填写业务联系人电话"  name="linkmanPhone" id="linkmanPhone" class="input-xlarge" value="${musicApprove.linkmanPhone}" onkeyup="this.value=this.value.replace(/\D/g,'')">
+									<p class="help-block" style="display: none;color:red;">请填写业务联系人电话</p>
 								</div>
 							</div>
 
@@ -152,21 +214,27 @@
 											<tbody>
 											<tr>
 												<td><label class="control-label" >行业类型</label></td>
-												<td><input type="text" placeholder="请填写行业类型" name="industryTyp"  class="input-xlarge" value="${musicComment.industryTyp}"></td>
+												<td><input type="text" placeholder="请填写行业类型" name="industryTyp"  class="input-xlarge" value="${musicComment.industryTyp}">
+												</td>
 												<td><label class="control-label" >类别</label></td>
-												<td><input type="text" placeholder="请填写类别" name="typ"  class="input-xlarge" value="${musicComment.typ}"></td>
+												<td><input type="text" placeholder="请填写类别" name="typ"  class="input-xlarge" value="${musicComment.typ}">
+												</td>
 											</tr>
 											<tr>
 												<td><label class="control-label" >播出内容</label></td>
-												<td><input type="text" placeholder="请填写播出内容"  name="playContent"  class="input-xlarge" value="${musicComment.playContent}"></td>
+												<td><input type="text" placeholder="请填写播出内容"  name="playContent"  class="input-xlarge" value="${musicComment.playContent}">
+												</td>
 												<td><label class="control-label" >播出要求</label></td>
-												<td><input type="text" placeholder="请填写播出要求"  name="playRequire"  class="input-xlarge" value="${musicComment.playRequire}"></td>
+												<td><input type="text" placeholder="请填写播出要求"  name="playRequire"  class="input-xlarge" value="${musicComment.playRequire}">
+												</td>
 											</tr>
 											<tr>
 												<td><label class="control-label" >播出日期</label></td>
-												<td><input type="text" placeholder="请填写播出日期"  name="playDay"  class="input-xlarge" value="${musicComment.playDay}"></td>
+												<td><input type="text" placeholder="请填写播出日期"  name="playDay"  class="input-xlarge" value="${musicComment.playDay}">
+												</td>
 												<td><label class="control-label" >播出时间</label></td>
-												<td><input type="text" placeholder="请填写播出时间"  name="playTime" class="input-xlarge" value="${musicComment.playTime}"></td>
+												<td><input type="text" placeholder="请填写播出时间"  name="playTime" class="input-xlarge" value="${musicComment.playTime}">
+												</td>
 											</tr>
 											<tr>
 												<td><label class="control-label" >播出时段</label></td>
@@ -180,7 +248,7 @@
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty musicApprove.id}">
-								<div name="musicComment">
+								<div name="musicComment" class="mcCss">
 									<label class="control-label">播出内容</label>&nbsp;&nbsp;&nbsp;&nbsp;[<a href="javascript:void(0)" name="addDivWithMusicComment">添加</a>]&nbsp;&nbsp;[<a href="javascript:void(0)" name="delDivWithMusicComment">删除</a>]
 									<table class="table">
 										<tbody>
